@@ -1,0 +1,20 @@
+# Node
+node_modules/
+**/node_modules/
+
+# Builds
+frontend/dist/
+backend/storage/
+coverage/
+*.log
+
+# Env
+*.env
+.env*
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
