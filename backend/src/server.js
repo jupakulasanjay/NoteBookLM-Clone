@@ -19,10 +19,8 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// health
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
-// upload pdf
 app.post('/api/upload', upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file' });
   const id = nanoid(10);
@@ -33,10 +31,8 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
   });
 });
 
-// index endpoint: accepts per-page texts from client to embed and store
-// in-memory store for demo; replace with real DB/vector store in production
 const memory = {
-  pagesByDoc: new Map(), // docId -> [{ pageNumber, text, embedding }]
+  pagesByDoc: new Map(),
 };
 
 const BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
@@ -75,9 +71,8 @@ app.post('/api/index', async (req, res) => {
   if (!docId || !Array.isArray(pages) || pages.length === 0) {
     return res.status(400).json({ error: 'docId and pages required' });
   }
-  const texts = pages.map(p => p.text || '');
+
   try {
-    // embed per-page with chunking, then average the chunk embeddings per page
     const rows = [];
     for (const p of pages) {
       const chunks = chunkText(p.text || '', 1500);
